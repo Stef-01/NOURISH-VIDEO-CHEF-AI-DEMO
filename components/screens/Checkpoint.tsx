@@ -20,6 +20,7 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
   const [showScan, setShowScan] = useState(false);
   const [activeTab, setActiveTab] = useState<'ai' | 'taste'>('ai'); // Default to AI Analysis
   const [expandedChip, setExpandedChip] = useState<string | null>(null); // Track expanded chip
+  const [isCapturing, setIsCapturing] = useState(false); // Photo capture animation
 
   const configs: Record<string, CheckpointConfig> = {
     'CHECK_ONIONS': {
@@ -52,7 +53,7 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
     },
     'CHECK_SALT': {
       title: 'Salt check',
-      subtitle: 'Is this plain salt or a seasoning mix?',
+      subtitle: 'Analyze salt content',
       aiChips: ['Plain salt', 'Seasoning mix'],
       aiRemedies: {
         'Plain salt': 'Good! Use ½ tsp for this recipe. You can adjust later.',
@@ -82,7 +83,12 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
   const config = configs[screenId] || configs['CHECK_ONIONS'];
 
   const handleCapture = () => {
-    setCaptured(true);
+    setIsCapturing(true);
+    // Flash animation, then show analysis after delay
+    setTimeout(() => {
+      setIsCapturing(false);
+      setCaptured(true);
+    }, 800); // 800ms for capture animation
   };
 
   const handleChip = (chip: string) => {
@@ -154,13 +160,18 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
   return (
     <div className="h-full flex flex-col bg-black relative">
       <StatusBar light />
-      
+
       {/* Background Ambience */}
       <img
         src={config.bgImage}
         alt="Background"
         className="absolute inset-0 w-full h-full object-cover"
       />
+
+      {/* Capture Flash Animation */}
+      {isCapturing && (
+        <div className="absolute inset-0 bg-white z-50 animate-[flash_0.4s_ease-out]" />
+      )}
       
       {/* Overlay Content */}
       <div className="relative z-10 flex flex-col h-full justify-between pb-8 pt-12">
