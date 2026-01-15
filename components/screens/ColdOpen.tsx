@@ -8,11 +8,11 @@ export const ColdOpen: React.FC<ScreenProps> = ({ onNavigate }) => {
     <div className="h-full flex flex-col relative bg-black">
       <StatusBar light />
       
-      {/* Background Image - Blurred Hero */}
-      <img 
+      {/* Background Image - Hero */}
+      <img
         src={IMAGES.heroBackground}
-        alt="Hero Background" 
-        className="absolute inset-0 w-full h-full object-cover opacity-60 blur-sm"
+        alt="Hero Background"
+        className="absolute inset-0 w-full h-full object-cover opacity-60"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/30" />
 

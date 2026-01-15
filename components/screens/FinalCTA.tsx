@@ -7,9 +7,9 @@ export const FinalCTA: React.FC<ScreenProps> = ({ onNavigate }) => {
   return (
     <div className="h-full flex flex-col bg-black relative">
       <StatusBar light />
-      <img 
+      <img
         src={IMAGES.heroBackground}
-        className="absolute inset-0 w-full h-full object-cover opacity-40 blur-sm"
+        className="absolute inset-0 w-full h-full object-cover opacity-40"
       />
       
       <div className="relative z-10 flex flex-col h-full items-center justify-center px-8 text-center">

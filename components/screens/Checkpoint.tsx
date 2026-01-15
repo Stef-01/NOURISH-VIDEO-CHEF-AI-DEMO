@@ -74,20 +74,46 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
     return (
         <div className="h-full flex flex-col bg-black relative">
             <StatusBar light />
-            <div className="absolute inset-0 bg-black/50 z-10">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-2 border-nourish-gold rounded-xl flex items-center justify-center">
-                    <div className="w-full h-0.5 bg-red-500 animate-[scan_2s_infinite]" />
+            {/* Background image without blur */}
+            <img src={config.bgImage} className="absolute inset-0 w-full h-full object-cover" />
+
+            {/* Scanner overlay */}
+            <div className="absolute inset-0 z-10">
+                {/* Scanner box positioned over sodium label area */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72">
+                    {/* Scanner border with glow effect */}
+                    <div className="absolute inset-0 border-4 border-nourish-gold rounded-xl shadow-[0_0_30px_rgba(212,168,75,0.8)] animate-pulse">
+                        {/* Corner accents */}
+                        <div className="absolute -top-1 -left-1 w-8 h-8 border-t-4 border-l-4 border-nourish-gold rounded-tl-xl"></div>
+                        <div className="absolute -top-1 -right-1 w-8 h-8 border-t-4 border-r-4 border-nourish-gold rounded-tr-xl"></div>
+                        <div className="absolute -bottom-1 -left-1 w-8 h-8 border-b-4 border-l-4 border-nourish-gold rounded-bl-xl"></div>
+                        <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-4 border-r-4 border-nourish-gold rounded-br-xl"></div>
+                    </div>
+
+                    {/* Animated scan line */}
+                    <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-xl">
+                        <div className="w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent shadow-[0_0_20px_rgba(239,68,68,0.8)] animate-[scan_2s_ease-in-out_infinite]" />
+                    </div>
+
+                    {/* Crosshair center */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div className="w-3 h-3 border-2 border-nourish-gold rounded-full bg-nourish-gold/30"></div>
+                    </div>
                 </div>
-                <div className="absolute bottom-32 w-full text-center">
-                    <p className="text-white text-lg font-bold">Scanning...</p>
-                    <p className="text-red-400 font-bold mt-2 bg-black/80 inline-block px-4 py-2 rounded-lg">High sodium: 480mg</p>
+
+                {/* Scanning status */}
+                <div className="absolute bottom-32 w-full text-center z-20">
+                    <p className="text-white text-xl font-bold mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">Scanning nutritional label...</p>
+                    <div className="inline-block bg-red-500/95 px-6 py-3 rounded-xl border-2 border-red-400 shadow-[0_0_30px_rgba(239,68,68,0.6)]">
+                        <p className="text-white font-bold text-lg">⚠️ High sodium: 900mg</p>
+                        <p className="text-white/90 text-sm mt-1">Per serving</p>
+                    </div>
                 </div>
             </div>
-            {/* Fake auto advance after scan */}
-            <img src={config.bgImage} className="absolute inset-0 w-full h-full object-cover" />
-            <button 
-                onClick={() => onNavigate('COPILOT_SODIUM')} 
-                className="absolute bottom-10 left-6 right-6 h-14 bg-white text-black font-bold rounded-full z-20"
+
+            <button
+                onClick={() => onNavigate('COPILOT_SODIUM')}
+                className="absolute bottom-10 left-6 right-6 h-14 bg-white text-black font-bold rounded-full z-20 shadow-xl hover:scale-[1.02] transition-transform"
             >
                 See results
             </button>
@@ -100,10 +126,10 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
       <StatusBar light />
       
       {/* Background Ambience */}
-      <img 
+      <img
         src={config.bgImage}
-        alt="Background" 
-        className="absolute inset-0 w-full h-full object-cover opacity-50 blur-sm"
+        alt="Background"
+        className="absolute inset-0 w-full h-full object-cover"
       />
       
       {/* Overlay Content */}
