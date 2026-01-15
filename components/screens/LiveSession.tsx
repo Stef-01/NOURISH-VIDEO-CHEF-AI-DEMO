@@ -119,8 +119,9 @@ export const LiveSession: React.FC<ScreenProps & { screenId: ScreenId }> = ({ on
         </div>
 
         <div className="flex gap-3">
-            <button onClick={() => onNavigate(config.nextScreen)} className="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 font-bold text-[14px]">Skip</button>
-            <button className="flex-1 py-3 rounded-xl bg-gray-900 text-white font-bold text-[14px]">Hands-free</button>
+            <button onClick={() => onNavigate(config.nextScreen)} className="w-full py-3 rounded-xl bg-gray-100 text-gray-600 font-bold text-[14px]">
+              {screenId === 'LIVE_MASALA' ? 'Next' : 'Skip'}
+            </button>
         </div>
       </div>
 

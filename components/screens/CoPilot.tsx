@@ -1,12 +1,14 @@
 import React from 'react';
 import { ScreenProps, ScreenId } from '../../types';
 import { StatusBar, HomeIndicator } from '../Layout';
+import { IMAGES } from '../../assets';
 
 interface CoPilotConfig {
   header: string;
   cards: { title: string; body: string }[];
   nextScreen: ScreenId;
   curiosity?: { question: string; options: string[] };
+  bgImage?: string;
 }
 
 export const CoPilot: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onNavigate, screenId }) => {
@@ -18,7 +20,8 @@ export const CoPilot: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onNavi
         { title: 'Get to translucent', body: 'Cook 2 minutes more on medium. Stir every 20 seconds.' },
         { title: 'Avoid extra oil', body: 'If sticking, add 1 tbsp water, not more oil.' }
       ],
-      nextScreen: 'LIVE_ONIONS'
+      nextScreen: 'LIVE_ONIONS',
+      bgImage: IMAGES.checkOnions
     },
     'COPILOT_SPICE': {
       header: 'Spice timing',
@@ -51,9 +54,16 @@ export const CoPilot: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onNavi
   return (
     <div className="h-full flex flex-col bg-[#0D0D0D] relative">
       <StatusBar light />
-      
+
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black" />
+      {config.bgImage ? (
+        <>
+          <img src={config.bgImage} alt="Background" className="absolute inset-0 w-full h-full object-cover opacity-50" />
+          <div className="absolute inset-0 bg-black/40" />
+        </>
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black" />
+      )}
       
       <div className="relative z-10 flex flex-col h-full p-6 pt-4">
         <div className="flex-1 overflow-y-auto no-scrollbar pt-8">

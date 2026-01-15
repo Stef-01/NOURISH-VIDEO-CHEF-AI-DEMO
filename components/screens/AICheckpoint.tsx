@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ScreenProps } from '../../types';
 import { StatusBar, HomeIndicator } from '../Layout';
 import { IconVideo, IconCamera } from '../Icons';
+import { IMAGES } from '../../assets';
 
 export const AICheckpoint: React.FC<ScreenProps> = ({ onNavigate }) => {
   const feedbackChips = ['Too Oily', 'Too Spicy', 'Needs Flavor', 'Too Thick', 'Just Right'];
@@ -12,10 +13,10 @@ export const AICheckpoint: React.FC<ScreenProps> = ({ onNavigate }) => {
       <StatusBar light />
       
       {/* Background Ambience */}
-      <img 
-        src="https://images.unsplash.com/photo-1556912172-4545a97795f0?q=80&w=1000&auto=format&fit=crop" 
-        alt="Dark Kitchen" 
-        className="absolute inset-0 w-full h-full object-cover opacity-40 blur-md"
+      <img
+        src={IMAGES.heroBackground}
+        alt="Dark Kitchen"
+        className="absolute inset-0 w-full h-full object-cover opacity-40"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
 
