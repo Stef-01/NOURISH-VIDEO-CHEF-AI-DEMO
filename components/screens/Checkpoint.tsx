@@ -9,6 +9,7 @@ interface CheckpointConfig {
   subtitle: string;
   tasteChips: string[]; // User-selected taste test options
   aiChips: string[]; // AI-detected analysis options
+  aiRemedies: Record<string, string>; // Remedies for each AI chip
   nextScreen: ScreenId; // Maps to chip selection logic usually, simplified here
   bgImage: string;
   isSaltCheck?: boolean;
@@ -18,13 +19,20 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
   const [captured, setCaptured] = useState(false);
   const [showScan, setShowScan] = useState(false);
   const [activeTab, setActiveTab] = useState<'ai' | 'taste'>('ai'); // Default to AI Analysis
+  const [expandedChip, setExpandedChip] = useState<string | null>(null); // Track expanded chip
 
   const configs: Record<string, CheckpointConfig> = {
     'CHECK_ONIONS': {
       title: 'Quick check',
       subtitle: 'Show your onions for 2 seconds.',
       aiChips: ['Too brown', 'Sticking', 'Burning - decrease heat', 'Just right'],
-      tasteChips: ['Too bland', 'Too oily', 'Perfect taste'],
+      aiRemedies: {
+        'Too brown': 'Lower heat to medium-low. Add 1 tbsp water to slow browning and prevent burning.',
+        'Sticking': 'Add 1 tbsp water (not oil) and stir gently. Lower heat slightly.',
+        'Burning - decrease heat': 'Immediately lower to medium-low. Remove from heat for 30 seconds, then continue.',
+        'Just right': 'Perfect! Continue cooking as planned.'
+      },
+      tasteChips: ['Too bland?', 'Too oily?', 'Perfect taste?'],
       nextScreen: 'COPILOT_ONIONS',
       bgImage: IMAGES.checkOnions
     },
@@ -32,7 +40,13 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
       title: 'Quick check',
       subtitle: 'Show the oil surface for spice timing.',
       aiChips: ['Too hot', 'Smoking - decrease heat', 'Just right', 'Not ready'],
-      tasteChips: ['Too spicy', 'Not spicy enough', 'Perfect balance'],
+      aiRemedies: {
+        'Too hot': 'Remove from heat for 30 seconds. Lower to medium. Add spices when oil shimmers.',
+        'Smoking - decrease heat': 'Immediately lower heat to low. Wait 15 seconds before adding spices.',
+        'Just right': 'Perfect temperature! Add cumin seeds now.',
+        'Not ready': 'Keep on medium heat. Wait until oil shimmers (about 30 more seconds).'
+      },
+      tasteChips: ['Too spicy?', 'Not spicy enough?', 'Perfect balance?'],
       nextScreen: 'COPILOT_SPICE',
       bgImage: IMAGES.checkOil
     },
@@ -40,7 +54,11 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
       title: 'Salt check',
       subtitle: 'Is this plain salt or a seasoning mix?',
       aiChips: ['Plain salt', 'Seasoning mix'],
-      tasteChips: ['Too salty', 'Needs more salt', 'Perfect'],
+      aiRemedies: {
+        'Plain salt': 'Good! Use ½ tsp for this recipe. You can adjust later.',
+        'Seasoning mix': 'Contains extra sodium. Use only ¼ tsp now, taste before adding more.'
+      },
+      tasteChips: ['Too salty?', 'Needs more salt?', 'Perfect?'],
       nextScreen: 'COPILOT_SODIUM',
       bgImage: IMAGES.checkSalt,
       isSaltCheck: true
@@ -49,7 +67,13 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
       title: 'Quick check',
       subtitle: 'Show spinach color and texture.',
       aiChips: ['Too thick - add water', 'Too watery - simmer more', 'Dull color', 'Perfect consistency'],
-      tasteChips: ['Bitter taste', 'Too bland', 'Perfect flavor'],
+      aiRemedies: {
+        'Too thick - add water': 'Add ¼ cup water. Stir gently and simmer 2 minutes.',
+        'Too watery - simmer more': 'Simmer uncovered on medium-low for 3-4 minutes to reduce liquid.',
+        'Dull color': 'Normal! Add a squeeze of lemon at the end to brighten flavor.',
+        'Perfect consistency': 'Excellent! Your palak dal looks great.'
+      },
+      tasteChips: ['Bitter taste?', 'Too bland?', 'Perfect flavor?'],
       nextScreen: 'COPILOT_PALAK',
       bgImage: IMAGES.checkPalak
     }
@@ -141,8 +165,10 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
       {/* Overlay Content */}
       <div className="relative z-10 flex flex-col h-full justify-between pb-8 pt-12">
         <div className="px-6">
-            <h2 className="text-[32px] font-bold text-white mb-2">{config.title}</h2>
-            <p className="text-[18px] text-white/80">{config.subtitle}</p>
+            <div className="bg-black/60 backdrop-blur-sm rounded-2xl px-6 py-4 inline-block">
+                <h2 className="text-[32px] font-bold text-white mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">{config.title}</h2>
+                <p className="text-[18px] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">{config.subtitle}</p>
+            </div>
         </div>
 
         <div className="w-full bg-black/40 backdrop-blur-xl rounded-t-[32px] p-6 pb-10 border-t border-white/10">
@@ -186,16 +212,49 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
                     </div>
 
                     {/* Chips based on active tab */}
-                    <div className="flex flex-wrap gap-3 justify-center">
-                        {(activeTab === 'ai' ? config.aiChips : config.tasteChips).map(chip => (
-                            <button
-                                key={chip}
-                                onClick={() => handleChip(chip)}
-                                className="px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white font-medium hover:bg-nourish-gold hover:border-nourish-gold transition-colors"
-                            >
-                                {chip}
-                            </button>
-                        ))}
+                    <div className="space-y-3">
+                        {activeTab === 'ai' ? (
+                            // AI Analysis - Expandable chips with remedies
+                            config.aiChips.map(chip => {
+                                const isExpanded = expandedChip === chip;
+                                return (
+                                    <div key={chip} className="w-full">
+                                        <button
+                                            onClick={() => setExpandedChip(isExpanded ? null : chip)}
+                                            className="w-full px-5 py-3 rounded-2xl bg-white/10 border border-white/20 text-white font-medium hover:bg-nourish-gold/20 hover:border-nourish-gold transition-all text-left"
+                                        >
+                                            {chip}
+                                        </button>
+                                        {isExpanded && config.aiRemedies[chip] && (
+                                            <div className="mt-2 px-5 py-4 rounded-2xl bg-nourish-gold/90 border border-nourish-gold animate-[fadeIn_0.2s_ease-out]">
+                                                <p className="text-black font-medium text-[15px] leading-relaxed">
+                                                    💡 {config.aiRemedies[chip]}
+                                                </p>
+                                                <button
+                                                    onClick={() => handleChip(chip)}
+                                                    className="mt-3 w-full py-2 bg-black/80 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors"
+                                                >
+                                                    Apply this fix →
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            // Taste Test - Simple selectable chips
+                            <div className="flex flex-wrap gap-3 justify-center">
+                                {config.tasteChips.map(chip => (
+                                    <button
+                                        key={chip}
+                                        onClick={() => handleChip(chip)}
+                                        className="px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white font-medium hover:bg-nourish-gold hover:border-nourish-gold transition-colors"
+                                    >
+                                        {chip}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
