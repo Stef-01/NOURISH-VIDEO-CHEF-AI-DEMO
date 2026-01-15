@@ -1,0 +1,105 @@
+# AI Image Prompts for NOURISH App (Palak Dal Demo)
+
+**Global Generative Settings:**
+*   **Style:** Authentic Cooking Documentation (Phone Camera POV) & High-End Food Photography.
+*   **Lighting:** Natural window light (side-lit), realistic reflections on stainless steel.
+*   **Context:** Modern home kitchen.
+
+---
+
+## 1. App Navigation & Branding
+
+**Asset ID:** `heroBackground`
+**Usage:** Cold Open screen, Final CTA background.
+**Description:** Atmospheric kitchen background.
+**Prompt:**
+> Vertical shot of a modern kitchen counter in low light. Soft focus. A rustic pot or ingredients in the foreground. Dark, moody atmosphere suitable for white text overlay.
+> **AR:** --ar 9:16
+
+---
+
+## 2. Menu & Selection (The Hero)
+
+**Asset ID:** `palakDalHero`
+**Usage:** Dish Selection card.
+**Reference:** Screenshot of black bowl.
+**Prompt:**
+> Top-down food photography of "Palak Dal".
+> **Subject:** A matte black ceramic bowl filled with vibrant green spinach dal.
+> **Garnish:** A distinct swirl of white cream (in a '6' shape) and a single whole dried red chili tempered on top.
+> **Surface:** Dark rustic wooden table.
+> **Lighting:** Moody, high contrast, accentuating the texture of the greens.
+> **AR:** --ar 4:5
+
+---
+
+## 3. Live Cooking Stages (The Process)
+
+**Asset ID:** `liveTemper` / `checkOil`
+**Usage:** Live Tempering Step.
+**Reference:** Screenshot of cumin seeds in oil.
+**Prompt:**
+> First-person POV looking down into a stainless steel frying pan.
+> **Action:** Hot oil covers the bottom. Cumin seeds are scattered and sizzling, creating small ripple rings in the oil.
+> **Lighting:** Bright reflection of a window on the steel surface.
+> **AR:** --ar 9:16
+
+**Asset ID:** `liveOnions` / `checkOnions`
+**Usage:** Onion Sauté Step.
+**Reference:** Screenshot of onions in pan.
+**Prompt:**
+> Vertical POV shot looking into a stainless steel pan.
+> **Subject:** Chopped red onions being sautéed. They are in the "translucent" stage, turning slightly pink/golden brown.
+> **Action:** A wooden spatula with a flat edge is resting in the onions.
+> **Texture:** Glistening with oil, soft steam rising.
+> **AR:** --ar 9:16
+
+**Asset ID:** `liveMasala`
+**Usage:** Masala Base Step.
+**Reference:** Screenshot of red paste.
+**Prompt:**
+> Vertical POV shot of a cooking pot.
+> **Subject:** A rich, deep crimson red tomato-onion masala paste.
+> **Texture:** Thick, bubbly, with oil separating at the edges (Rogandjosh style).
+> **Utensil:** A wooden spoon resting in the thick paste.
+> **AR:** --ar 9:16
+
+---
+
+## 4. Checkpoints (The Analysis)
+
+**Asset ID:** `checkSalt`
+**Usage:** Salt/Spice Checkpoint.
+**Reference:** Screenshot of hand holding spoon.
+**Prompt:**
+> First-person POV. A hand is holding a small wooden spice spoon filled with brown ground spice (garam masala or cumin powder).
+> **Background:** The spoon is held over a pan containing a bubbling red masala base.
+> **Focus:** Sharp focus on the texture of the spice powder in the spoon. Background slightly blurred.
+> **Note:** This image serves as the base for the "Sodium Scanner" UI overlay.
+> **AR:** --ar 9:16
+
+**Asset ID:** `checkPalak`
+**Usage:** Spinach Addition Step.
+**Reference:** Screenshot of spinach in dal.
+**Prompt:**
+> Top-down POV looking into a stainless steel pan.
+> **Subject:** Fresh green spinach leaves (whole/wilted) being folded into yellow split lentils (Chana/Moong dal).
+> **Contrast:** Vibrant green leaves against the yellow dal texture.
+> **Action:** Being mixed.
+> **AR:** --ar 9:16
+
+---
+
+## 5. Completion (The Result)
+
+**Asset ID:** `platedDish`
+**Usage:** Plate Method / Completion.
+**Reference:** Screenshot of Thali plate.
+**Prompt:**
+> Perfectly centered top-down shot of a round white dinner plate on a white surface.
+> **Arrangement:**
+> 1.  **Top:** A neat mound of white basmati rice.
+> 2.  **Left (Crescent):** Fresh salad arrangement consisting of sliced cucumber rounds, red onion rings, and tomato wedges.
+> 3.  **Right:** A small stainless steel bowl (katori) filled with the Green Palak Dal.
+> **Lighting:** Clean, bright, even lighting (high-key). No harsh shadows.
+> **AR:** --ar 1:1
