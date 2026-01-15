@@ -20,7 +20,6 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
   const [showScan, setShowScan] = useState(false);
   const [activeTab, setActiveTab] = useState<'ai' | 'taste'>('ai'); // Default to AI Analysis
   const [expandedChip, setExpandedChip] = useState<string | null>(null); // Track expanded chip
-  const [isCapturing, setIsCapturing] = useState(false); // Photo capture animation
 
   const configs: Record<string, CheckpointConfig> = {
     'CHECK_ONIONS': {
@@ -83,12 +82,7 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
   const config = configs[screenId] || configs['CHECK_ONIONS'];
 
   const handleCapture = () => {
-    setIsCapturing(true);
-    // Flash animation, then show analysis after delay
-    setTimeout(() => {
-      setIsCapturing(false);
-      setCaptured(true);
-    }, 800); // 800ms for capture animation
+    setCaptured(true);
   };
 
   const handleChip = (chip: string) => {
@@ -168,11 +162,6 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* Capture Flash Animation */}
-      {isCapturing && (
-        <div className="absolute inset-0 bg-white z-50 animate-[flash_0.4s_ease-out]" />
-      )}
-      
       {/* Overlay Content */}
       <div className="relative z-10 flex flex-col h-full justify-between pb-8 pt-12">
         <div className="px-6">
@@ -195,11 +184,11 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
                     </button>
                  </div>
             ) : (
-                <div className="animate-[fadeIn_0.3s_ease-out]">
-                    <p className="text-white/60 text-xs font-bold uppercase tracking-widest text-center mb-4">Analysis Results</p>
+                <div className="animate-[scaleIn_0.4s_cubic-bezier(0.34,1.56,0.64,1)]">
+                    <p className="text-white/60 text-xs font-bold uppercase tracking-widest text-center mb-4 animate-[fadeIn_0.5s_ease-out]">Analysis Results</p>
 
                     {/* Tabs */}
-                    <div className="flex gap-2 mb-4 bg-white/10 rounded-full p-1">
+                    <div className="flex gap-2 mb-4 bg-white/10 rounded-full p-1 animate-[slideUp_0.5s_cubic-bezier(0.34,1.56,0.64,1)_0.1s_both]">
                         <button
                             onClick={() => setActiveTab('ai')}
                             className={`flex-1 py-2 rounded-full text-[13px] font-bold transition-all ${
@@ -226,24 +215,28 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
                     <div className="space-y-3">
                         {activeTab === 'ai' ? (
                             // AI Analysis - Expandable chips with remedies
-                            config.aiChips.map(chip => {
+                            config.aiChips.map((chip, index) => {
                                 const isExpanded = expandedChip === chip;
                                 return (
-                                    <div key={chip} className="w-full">
+                                    <div
+                                        key={chip}
+                                        className="w-full animate-[slideUp_0.5s_cubic-bezier(0.34,1.56,0.64,1)_both]"
+                                        style={{ animationDelay: `${0.15 + index * 0.05}s` }}
+                                    >
                                         <button
                                             onClick={() => setExpandedChip(isExpanded ? null : chip)}
-                                            className="w-full px-5 py-3 rounded-2xl bg-white/10 border border-white/20 text-white font-medium hover:bg-nourish-gold/20 hover:border-nourish-gold transition-all text-left"
+                                            className="w-full px-5 py-3 rounded-2xl bg-white/10 border border-white/20 text-white font-medium hover:bg-nourish-gold/20 hover:border-nourish-gold hover:scale-[1.02] transition-all text-left"
                                         >
                                             {chip}
                                         </button>
                                         {isExpanded && config.aiRemedies[chip] && (
-                                            <div className="mt-2 px-5 py-4 rounded-2xl bg-nourish-gold/90 border border-nourish-gold animate-[fadeIn_0.2s_ease-out]">
+                                            <div className="mt-2 px-5 py-4 rounded-2xl bg-nourish-gold/90 border border-nourish-gold animate-[scaleIn_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">
                                                 <p className="text-black font-medium text-[15px] leading-relaxed">
                                                     💡 {config.aiRemedies[chip]}
                                                 </p>
                                                 <button
                                                     onClick={() => handleChip(chip)}
-                                                    className="mt-3 w-full py-2 bg-black/80 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors"
+                                                    className="mt-3 w-full py-2 bg-black/80 text-white rounded-xl font-bold text-sm hover:bg-black hover:scale-[1.02] transition-all"
                                                 >
                                                     Apply this fix →
                                                 </button>
@@ -255,11 +248,12 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
                         ) : (
                             // Taste Test - Simple selectable chips
                             <div className="flex flex-wrap gap-3 justify-center">
-                                {config.tasteChips.map(chip => (
+                                {config.tasteChips.map((chip, index) => (
                                     <button
                                         key={chip}
                                         onClick={() => handleChip(chip)}
-                                        className="px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white font-medium hover:bg-nourish-gold hover:border-nourish-gold transition-colors"
+                                        className="px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white font-medium hover:bg-nourish-gold hover:border-nourish-gold hover:scale-[1.05] transition-all animate-[scaleIn_0.4s_cubic-bezier(0.34,1.56,0.64,1)_both]"
+                                        style={{ animationDelay: `${0.15 + index * 0.05}s` }}
                                     >
                                         {chip}
                                     </button>

@@ -99,6 +99,30 @@ export default function App() {
           0% { opacity: 1; filter: brightness(2); }
           100% { opacity: 1; filter: brightness(1); }
         }
+        @keyframes scaleIn {
+          0% {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        @keyframes slideUp {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes fadeIn {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
       `}</style>
 
       {/* Scaled Wrapper for Visibility */}
