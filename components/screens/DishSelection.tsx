@@ -58,9 +58,9 @@ export const DishSelection: React.FC<ScreenProps> = ({ onNavigate }) => {
         </div>
 
         {/* Hero Dish Card */}
-        <div 
+        <div
           className={`flex-1 min-h-[280px] rounded-[32px] overflow-hidden relative cursor-pointer transform transition-all duration-500 group ${selected ? 'ring-4 ring-nourish-gold ring-offset-2' : ''}`}
-          onClick={() => selected && onNavigate('GOAL_SELECTION')}
+          onClick={() => onNavigate('GOAL_SELECTION')}
         >
           <img 
             src={IMAGES.palakDalHero}

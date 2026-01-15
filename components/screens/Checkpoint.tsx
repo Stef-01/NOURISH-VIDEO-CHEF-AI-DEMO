@@ -7,7 +7,8 @@ import { IMAGES } from '../../assets';
 interface CheckpointConfig {
   title: string;
   subtitle: string;
-  chips: string[];
+  tasteChips: string[]; // User-selected taste test options
+  aiChips: string[]; // AI-detected analysis options
   nextScreen: ScreenId; // Maps to chip selection logic usually, simplified here
   bgImage: string;
   isSaltCheck?: boolean;
@@ -16,26 +17,30 @@ interface CheckpointConfig {
 export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onNavigate, screenId }) => {
   const [captured, setCaptured] = useState(false);
   const [showScan, setShowScan] = useState(false);
+  const [activeTab, setActiveTab] = useState<'ai' | 'taste'>('ai'); // Default to AI Analysis
 
   const configs: Record<string, CheckpointConfig> = {
     'CHECK_ONIONS': {
       title: 'Quick check',
       subtitle: 'Show your onions for 2 seconds.',
-      chips: ['Too pale', 'Too brown', 'Sticking', 'Too oily', 'Just right'],
+      aiChips: ['Too brown', 'Sticking', 'Burning - decrease heat', 'Just right'],
+      tasteChips: ['Too bland', 'Too oily', 'Perfect taste'],
       nextScreen: 'COPILOT_ONIONS',
       bgImage: IMAGES.checkOnions
     },
     'CHECK_OIL': {
       title: 'Quick check',
       subtitle: 'Show the oil surface for spice timing.',
-      chips: ['Too hot', 'Just right', 'Not ready'],
+      aiChips: ['Too hot', 'Smoking - decrease heat', 'Just right', 'Not ready'],
+      tasteChips: ['Too spicy', 'Not spicy enough', 'Perfect balance'],
       nextScreen: 'COPILOT_SPICE',
       bgImage: IMAGES.checkOil
     },
     'CHECK_SALT': {
       title: 'Salt check',
       subtitle: 'Is this plain salt or a seasoning mix?',
-      chips: ['Plain salt', 'Seasoning mix'],
+      aiChips: ['Plain salt', 'Seasoning mix'],
+      tasteChips: ['Too salty', 'Needs more salt', 'Perfect'],
       nextScreen: 'COPILOT_SODIUM',
       bgImage: IMAGES.checkSalt,
       isSaltCheck: true
@@ -43,7 +48,8 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
     'CHECK_PALAK': {
       title: 'Quick check',
       subtitle: 'Show spinach color and texture.',
-      chips: ['Too thick', 'Too watery', 'Dull color', 'Just right'],
+      aiChips: ['Too thick - add water', 'Too watery - simmer more', 'Dull color', 'Perfect consistency'],
+      tasteChips: ['Bitter taste', 'Too bland', 'Perfect flavor'],
       nextScreen: 'COPILOT_PALAK',
       bgImage: IMAGES.checkPalak
     }
@@ -154,9 +160,35 @@ export const Checkpoint: React.FC<ScreenProps & { screenId: ScreenId }> = ({ onN
             ) : (
                 <div className="animate-[fadeIn_0.3s_ease-out]">
                     <p className="text-white/60 text-xs font-bold uppercase tracking-widest text-center mb-4">Analysis Results</p>
+
+                    {/* Tabs */}
+                    <div className="flex gap-2 mb-4 bg-white/10 rounded-full p-1">
+                        <button
+                            onClick={() => setActiveTab('ai')}
+                            className={`flex-1 py-2 rounded-full text-[13px] font-bold transition-all ${
+                                activeTab === 'ai'
+                                    ? 'bg-nourish-gold text-black shadow-lg'
+                                    : 'text-white/70 hover:text-white'
+                            }`}
+                        >
+                            AI Analysis
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('taste')}
+                            className={`flex-1 py-2 rounded-full text-[13px] font-bold transition-all ${
+                                activeTab === 'taste'
+                                    ? 'bg-nourish-gold text-black shadow-lg'
+                                    : 'text-white/70 hover:text-white'
+                            }`}
+                        >
+                            Taste Test
+                        </button>
+                    </div>
+
+                    {/* Chips based on active tab */}
                     <div className="flex flex-wrap gap-3 justify-center">
-                        {config.chips.map(chip => (
-                            <button 
+                        {(activeTab === 'ai' ? config.aiChips : config.tasteChips).map(chip => (
+                            <button
                                 key={chip}
                                 onClick={() => handleChip(chip)}
                                 className="px-5 py-3 rounded-full bg-white/10 border border-white/20 text-white font-medium hover:bg-nourish-gold hover:border-nourish-gold transition-colors"
