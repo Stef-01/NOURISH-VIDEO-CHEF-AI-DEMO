@@ -1,4 +1,4 @@
-export type ScreenId = 
+export type ScreenId =
   | 'COLD_OPEN'
   | 'DISH_SELECTION'
   | 'GOAL_SELECTION'
@@ -17,7 +17,8 @@ export type ScreenId =
   | 'COMPLETION_PHOTO'
   | 'PLATE_METHOD'
   | 'SUMMARY'
-  | 'FINAL_CTA';
+  | 'FINAL_CTA'
+  | 'FINAL_RECOMMENDATIONS';
 
 export interface ScreenProps {
   onNavigate: (screen: ScreenId) => void;
